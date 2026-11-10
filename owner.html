@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RoboAgent — Owner (khusus owner)</title>
+<style>
+
+body{font-family:'Archivo',system-ui,sans-serif;max-width:640px;margin:32px auto;padding:0 16px;background:#F9F4DD;color:#100D09}
+h1{color:#100D09}.card{background:#FEFCF3;border:3px solid #111;border-radius:16px;padding:16px;margin:16px 0;box-shadow:5px 5px 0 #111}
+button{padding:12px 20px;border-radius:12px;border:3px solid #111;background:#FE7902;color:#fff;font-weight:800;font-size:15px;cursor:pointer;margin:4px 4px 4px 0;box-shadow:4px 4px 0 #111}
+button:disabled{opacity:.5}
+button.danger{background:#F4CE23;color:#100D09}
+code{word-break:break-all;color:#FE7902}
+.warn{background:#FFE1D6;border-color:#111}
+small{color:#5A4A3A}
+input{width:100%;padding:12px;font-family:inherit;font-size:14px;background:#fff;color:#100D09;border:3px solid #111;border-radius:12px;margin:8px 0}
+.readout{font-size:14px;line-height:2}
+.readout b{color:#FE7902}
+
+</style>
+</head>
+<body>
+<h1>🤖 RoboAgent — Owner</h1>
+<div class="card warn">
+<p><b>Halaman ini hanya untuk owner.</b> Hanya wallet owner yang bisa menjalankan transaksi di bawah — wallet lain akan ditolak kontrak.</p>
+<p><b>Kontrak (BSC):</b> <code>0xF8b6867eFA31BBD76e10D0bcEFbdb22abc6b07fb</code><br>
+<b>Jaringan:</b> BNB Smart Chain (56) · <b>Harga mint:</b> #1 GRATIS, #2 0.0005 / #3 0.001 / #4 0.002 BNB</p>
+<p id="deployWarn" style="display:none"><b>Kontrak belum di-deploy</b> — alamat di atas masih placeholder. Semua tombol di bawah nonaktif sampai alamat kontrak asli dipasang.</p>
+</div>
+<div class="card">
+<button id="connect">1. Hubungkan Wallet Owner</button>
+<p id="wallet">Belum terhubung.</p>
+<div class="readout" id="readouts"></div>
+<button id="refreshBtn" disabled>↻ Refresh status</button>
+</div>
+<div class="card">
+<h3>Buka / tutup mint</h3>
+<p><small>Membuka mint pertama kali akan memulai jam 3 hari free window (startTime di-set kontrak).</small></p>
+<button id="openMint" disabled>2. BUKA MINT</button>
+<button id="closeMint" disabled class="danger">TUTUP MINT</button>
+<p id="statusMint"></p>
+</div>
+<div class="card">
+<h3>Base URI metadata</h3>
+<input id="baseUriInput" type="text" value="https://roboagent.vercel.app/metadata/">
+<button id="setBaseUri" disabled>3. SET BASE URI</button>
+<p id="statusUri"></p>
+</div>
+<div class="card">
+<h3>Tarik treasury (60% dari mint berbayar)</h3>
+<p><small>Treasury hanya bisa ditarik owner, dan hanya saldo 60% milik owner — dana pool dividen tidak ikut tertarik.</small></p>
+<button id="withdrawBtn" disabled>4. WITHDRAW TREASURY</button>
+<p id="statusWd"></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.13.2/dist/ethers.umd.min.js"></script>
+<script>
+const CONTRACT = "0xF8b6867eFA31BBD76e10D0bcEFbdb22abc6b07fb";
+const ZERO = "0x0000000000000000000000000000000000000000";
+const IS_LIVE = CONTRACT && CONTRACT.toLowerCase() !== ZERO;
+const ABI = ["function setMintPaused(bool paused) external","function setBaseURI(string baseURI_) external","function withdrawTreasury() external","function mintPaused() public view returns (bool)","function owner() public view returns (address)","function totalMinted() public view returns (uint256)","function freeRemaining() public view returns (uint256)","function treasuryBalance() public view returns (uint256)","function totalWeight() public view returns (uint256)"];
+let provider, signer, contract;
+const $ = id => document.getElementById(id);
+if (!IS_LIVE) { $("deployWarn").style.display = "block"; }
+// Kalau wallet ganti jaringan saat halaman terbuka, ethers v6 menolak provider lama
+// (NETWORK_ERROR "network changed") — reload halaman supaya provider dibuat ulang.
+if (window.ethereum && window.ethereum.on) window.ethereum.on("chainChanged", () => location.reload());
+async function loadReadouts(){
+  if (!contract) return;
+  try{
+    const [o, tm, p, fr, tb, tw] = await Promise.all([contract.owner(), contract.totalMinted(), contract.mintPaused(), contract.freeRemaining(), contract.treasuryBalance(), contract.totalWeight()]);
+    $("readouts").innerHTML = "Owner: <b>" + o + "</b><br>Total minted: <b>" + tm + "</b> / 6,666<br>Mint paused: <b>" + (p ? "YA (tutup)" : "TIDAK (buka)") + "</b><br>Free remaining: <b>" + fr + "</b> / 1,111<br>Treasury balance: <b>" + (Number(tb)/1e18).toFixed(5) + " BNB</b><br>Total dividend weight: <b>" + tw + "</b>";
+  }catch(e){ $("readouts").textContent = "Gagal baca status: " + (e.message || e); }
+}
+$("connect").onclick = async () => {
+  try {
+    if (!IS_LIVE) { $("wallet").textContent = "Kontrak belum di-deploy — hubungkan wallet setelah alamat kontrak asli dipasang."; return; }
+    if (!window.ethereum) { $("wallet").textContent = "Wallet tidak ditemukan. Buka halaman ini di dalam browser aplikasi wallet (MetaMask / Trust Wallet / Binance Wallet)."; return; }
+    provider = new ethers.BrowserProvider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    let net = await provider.getNetwork();
+    if (net.chainId !== 56n) {
+      try { await window.ethereum.request({method:"wallet_switchEthereumChain",params:[{chainId:"0x38"}]}); }
+      catch (e) {
+        if (e && e.code === 4902) { await window.ethereum.request({method:"wallet_addEthereumChain",params:[{chainId:"0x38",chainName:"BNB Smart Chain",nativeCurrency:{name:"BNB",symbol:"BNB",decimals:18},rpcUrls:["https://bsc-dataseed.bnbchain.org"],blockExplorerUrls:["https://bscscan.com"]}]}); }
+        else throw e;
+      }
+      // Provider lama dibuat saat wallet masih di chain lain — buat ulang setelah pindah jaringan.
+      provider = new ethers.BrowserProvider(window.ethereum);
+      net = await provider.getNetwork();
+    }
+    if (net.chainId !== 56n) { $("wallet").textContent = "Jaringan salah: pindah ke BNB Smart Chain (56) dulu."; return; }
+    signer = await provider.getSigner();
+    const addr = await signer.getAddress();
+    contract = new ethers.Contract(CONTRACT, ABI, signer);
+    const o = await contract.owner();
+    $("wallet").textContent = "Terhubung: " + addr + (addr.toLowerCase() === o.toLowerCase() ? " ✓ (ini wallet owner)" : " ⚠️ INI BUKAN WALLET OWNER — transaksi akan ditolak kontrak.");
+    ["refreshBtn","openMint","closeMint","setBaseUri","withdrawBtn"].forEach(id => { $(id).disabled = false; });
+    loadReadouts();
+  } catch (e) { $("wallet").textContent = "Gagal: " + (e.message || e); }
+};
+$("refreshBtn").onclick = loadReadouts;
+$("openMint").onclick = async () => {
+  try {
+    if (!contract) { $("statusMint").textContent = "Hubungkan wallet dulu."; return; }
+    if (!confirm("Buka mint RoboAgent (setMintPaused false)? Ini memulai jam 3 hari free window.")) return;
+    $("statusMint").textContent = "Mengirim setMintPaused(false) — konfirmasi di wallet...";
+    const tx = await contract.setMintPaused(false);
+    $("statusMint").textContent = "Transaksi terkirim: " + tx.hash + " — menunggu konfirmasi...";
+    await tx.wait();
+    $("statusMint").textContent = "✓ Sukses! Tx: " + tx.hash + " — mint sekarang TERBUKA.";
+    loadReadouts();
+  } catch (e) { $("statusMint").textContent = "Gagal: " + (e.message || e); }
+};
+$("closeMint").onclick = async () => {
+  try {
+    if (!contract) { $("statusMint").textContent = "Hubungkan wallet dulu."; return; }
+    if (!confirm("Tutup mint RoboAgent (setMintPaused true)?")) return;
+    $("statusMint").textContent = "Mengirim setMintPaused(true) — konfirmasi di wallet...";
+    const tx = await contract.setMintPaused(true);
+    $("statusMint").textContent = "Transaksi terkirim: " + tx.hash + " — menunggu konfirmasi...";
+    await tx.wait();
+    $("statusMint").textContent = "✓ Sukses! Tx: " + tx.hash + " — mint sekarang TERTUTUP.";
+    loadReadouts();
+  } catch (e) { $("statusMint").textContent = "Gagal: " + (e.message || e); }
+};
+$("setBaseUri").onclick = async () => {
+  try {
+    if (!contract) { $("statusUri").textContent = "Hubungkan wallet dulu."; return; }
+    const uri = $("baseUriInput").value.trim();
+    if (!uri) { $("statusUri").textContent = "Isi base URI dulu."; return; }
+    if (!confirm("Set baseURI ke: " + uri + " ?")) return;
+    $("statusUri").textContent = "Mengirim setBaseURI — konfirmasi di wallet...";
+    const tx = await contract.setBaseURI(uri);
+    $("statusUri").textContent = "Transaksi terkirim: " + tx.hash + " — menunggu konfirmasi...";
+    await tx.wait();
+    $("statusUri").textContent = "✓ Sukses! Tx: " + tx.hash;
+  } catch (e) { $("statusUri").textContent = "Gagal: " + (e.message || e); }
+};
+$("withdrawBtn").onclick = async () => {
+  try {
+    if (!contract) { $("statusWd").textContent = "Hubungkan wallet dulu."; return; }
+    if (!confirm("Tarik seluruh saldo treasury (60% owner) ke wallet owner?")) return;
+    $("statusWd").textContent = "Mengirim withdrawTreasury — konfirmasi di wallet...";
+    const tx = await contract.withdrawTreasury();
+    $("statusWd").textContent = "Transaksi terkirim: " + tx.hash + " — menunggu konfirmasi...";
+    await tx.wait();
+    $("statusWd").textContent = "✓ Sukses! Tx: " + tx.hash;
+    loadReadouts();
+  } catch (e) { $("statusWd").textContent = "Gagal: " + (e.message || e); }
+};
+</script>
+</body>
+</html>
