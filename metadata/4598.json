@@ -1,0 +1,23 @@
+{
+  "name": "RoboAgent #4598",
+  "description": "RoboAgent are 6,666 robot AI agents on BNB Chain. Mint #1 is FREE, then 0.0005 / 0.001 / 0.002 BNB for mints #2 / #3 / #4, max 4 per wallet. Paid mints share their fees with holders as dividends \u2014 Genesis weight 1, Miner weight 4. Fuse 3 Genesis into 1 Miner. 6,666 agents. One chain. No gate.",
+  "image": "https://roboagent-azure.vercel.app/images/guardian.svg",
+  "attributes": [
+    {
+      "trait_type": "Rarity",
+      "value": "Rare"
+    },
+    {
+      "trait_type": "Character",
+      "value": "Guardian"
+    },
+    {
+      "trait_type": "Type",
+      "value": "Genesis"
+    },
+    {
+      "trait_type": "Weight",
+      "value": 1
+    }
+  ]
+}
