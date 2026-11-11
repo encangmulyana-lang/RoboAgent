@@ -321,10 +321,10 @@ const SEL_LISTED = "0x05337198", SEL_LISTING = "0x107a274a", SEL_OWNEROF = "0x63
 let provider=null, signer=null, userAddr=null, qty=1, freeEnd=0, startTime=0, paused=true, myMinted=0;
 let LANG="en";
 const STR={
-en:{comingSoon:"Contract not deployed yet — mint opens after launch.",noCount:"Could not load live count — check your connection and refresh.",paused:"Mint is PAUSED — the contract is deployed, opening soon.",minted:(n,p)=>n+" of 6,666 minted ("+p+"%)",freeClosed:"Free window closed — paid minting continues.",freeStarts:"Free window starts at launch.",freeIn:(d,h,m,s)=>"Free window closes in "+d+"d "+h+"h "+m+"m "+s+"s",freeOut:"Free mint pool is empty — paid minting continues."},
-ja:{comingSoon:"コントラクトはまだデプロイされていません——ローンチ後にミントが始まります。",noCount:"ライブ数を取得できませんでした——接続を確認して更新してください。",paused:"ミントは一時停止中です——コントラクトはデプロイ済み、まもなく開始します。",minted:(n,p)=>"ミント済み "+n+" / 6,666（"+p+"%）",freeClosed:"無料ウィンドウは終了しました——有料ミントは続きます。",freeStarts:"無料ウィンドウはローンチ時に始まります。",freeIn:(d,h,m,s)=>"無料ウィンドウ終了まで "+d+"日 "+h+"時間 "+m+"分 "+s+"秒",freeOut:"無料枠はなくなりました——有料ミントは続きます。"},
-zh:{comingSoon:"合约尚未部署——上线后开放铸造。",noCount:"无法加载实时数量——请检查网络后刷新。",paused:"铸造已暂停——合约已部署，即将开放。",minted:(n,p)=>"已铸造 "+n+" / 6,666（"+p+"%）",freeClosed:"免费窗口已关闭——付费铸造继续开放。",freeStarts:"免费窗口将于上线时开启。",freeIn:(d,h,m,s)=>"免费窗口还剩 "+d+"天 "+h+"时 "+m+"分 "+s+"秒",freeOut:"免费名额已用完——付费铸造继续开放。"},
-ko:{comingSoon:"컨트랙트가 아직 배포되지 않았습니다 — 출시 후 민팅이 시작됩니다.",noCount:"실시간 개수를 불러올 수 없습니다 — 연결을 확인하고 새로고침하세요.",paused:"민팅이 일시중지되었습니다 — 컨트랙트는 배포되었고 곧 시작합니다.",minted:(n,p)=>"민팅됨 "+n+" / 6,666 ("+p+"%)",freeClosed:"무료 윈도우가 종료되었습니다 — 유료 민팅은 계속됩니다.",freeStarts:"무료 윈도우는 출시 시 시작됩니다.",freeIn:(d,h,m,s)=>"무료 윈도우 종료까지 "+d+"일 "+h+"시간 "+m+"분 "+s+"초",freeOut:"무료 수량이 소진되었습니다 — 유료 민팅은 계속됩니다."}
+en:{txWalletFee:"Your wallet could not prepare this transaction (empty answer from the browser). Open this site inside your wallet app browser (MetaMask / Trust Wallet / Binance Wallet) and try again.",comingSoon:"Contract not deployed yet — mint opens after launch.",noCount:"Could not load live count — check your connection and refresh.",paused:"Mint is PAUSED — the contract is deployed, opening soon.",minted:(n,p)=>n+" of 6,666 minted ("+p+"%)",freeClosed:"Free window closed — paid minting continues.",freeStarts:"Free window starts at launch.",freeIn:(d,h,m,s)=>"Free window closes in "+d+"d "+h+"h "+m+"m "+s+"s",freeOut:"Free mint pool is empty — paid minting continues."},
+ja:{txWalletFee:"ウォレットが取引を準備できませんでした（ブラウザからの応答が空でした）。MetaMask / Trust Wallet / Binance Wallet のアプリ内ブラウザでこのサイトを開いて、もう一度お試しください。",comingSoon:"コントラクトはまだデプロイされていません——ローンチ後にミントが始まります。",noCount:"ライブ数を取得できませんでした——接続を確認して更新してください。",paused:"ミントは一時停止中です——コントラクトはデプロイ済み、まもなく開始します。",minted:(n,p)=>"ミント済み "+n+" / 6,666（"+p+"%）",freeClosed:"無料ウィンドウは終了しました——有料ミントは続きます。",freeStarts:"無料ウィンドウはローンチ時に始まります。",freeIn:(d,h,m,s)=>"無料ウィンドウ終了まで "+d+"日 "+h+"時間 "+m+"分 "+s+"秒",freeOut:"無料枠はなくなりました——有料ミントは続きます。"},
+zh:{txWalletFee:"您的钱包无法准备这笔交易（浏览器返回为空）。请在钱包 App 的内置浏览器中打开本站（MetaMask / Trust Wallet / Binance Wallet），然后重试。",comingSoon:"合约尚未部署——上线后开放铸造。",noCount:"无法加载实时数量——请检查网络后刷新。",paused:"铸造已暂停——合约已部署，即将开放。",minted:(n,p)=>"已铸造 "+n+" / 6,666（"+p+"%）",freeClosed:"免费窗口已关闭——付费铸造继续开放。",freeStarts:"免费窗口将于上线时开启。",freeIn:(d,h,m,s)=>"免费窗口还剩 "+d+"天 "+h+"时 "+m+"分 "+s+"秒",freeOut:"免费名额已用完——付费铸造继续开放。"},
+ko:{txWalletFee:"지갑이 이 트랜잭션을 준비할 수 없습니다(브라우저의 응답이 비어 있습니다). 지갑 앱 브라우저(MetaMask / Trust Wallet / Binance Wallet) 안에서 이 사이트를 열고 다시 시도해 주세요.",comingSoon:"컨트랙트가 아직 배포되지 않았습니다 — 출시 후 민팅이 시작됩니다.",noCount:"실시간 개수를 불러올 수 없습니다 — 연결을 확인하고 새로고침하세요.",paused:"민팅이 일시중지되었습니다 — 컨트랙트는 배포되었고 곧 시작합니다.",minted:(n,p)=>"민팅됨 "+n+" / 6,666 ("+p+"%)",freeClosed:"무료 윈도우가 종료되었습니다 — 유료 민팅은 계속됩니다.",freeStarts:"무료 윈도우는 출시 시 시작됩니다.",freeIn:(d,h,m,s)=>"무료 윈도우 종료까지 "+d+"일 "+h+"시간 "+m+"분 "+s+"초",freeOut:"무료 수량이 소진되었습니다 — 유료 민팅은 계속됩니다."}
 };
 function fmtBnb(w){ return (Number(w)/1e18).toFixed(5); }
 function setLang(l){ LANG=l; document.documentElement.lang=l==="zh"?"zh-CN":l; ["en","ja","zh","ko"].forEach(x=>{ const b=document.getElementById("lang"+x[0].toUpperCase()+x.slice(1)); if(b) b.classList.toggle("on",x===l); }); document.querySelectorAll("[data-en]").forEach(el=>{ if((el.id==="connectBtn"||el.id==="connectBtn2"||el.id==="navConnect")&&userAddr) return; const v=el.dataset[l]; if(v!==undefined) el.textContent=v; }); document.querySelectorAll("[data-en-html]").forEach(el=>{ const v=el.dataset[l+"Html"]; if(v!==undefined) el.innerHTML=v; }); refresh(); }
@@ -464,12 +464,12 @@ async function mintNow(){
     let cost=0n;
     if(res){ try{ [cost]=ethers.AbiCoder.defaultAbiCoder().decode(["uint256","uint256"],res); }catch(e){} }
     const iface=new ethers.Interface(["function mint(uint256 quantity)"]);
-    const tx=await signer.sendTransaction({to:CONTRACT,data:iface.encodeFunctionData("mint",[qty]),value:cost});
+    const tx=await sendTx({to:CONTRACT,data:iface.encodeFunctionData("mint",[qty]),value:cost},300000);
     document.getElementById("mintMsg").textContent="Transaction sent: "+tx.hash+" — waiting for confirmation…";
     await tx.wait();
     document.getElementById("mintMsg").textContent="Minted! Tx: "+tx.hash;
     refresh();
-  }catch(e){ document.getElementById("mintMsg").textContent="Mint failed: "+(e.reason||e.message||e); }
+  }catch(e){ document.getElementById("mintMsg").textContent="Mint failed: "+txErrMsg(e); }
 }
 async function fuseNow(){
   if(!IS_LIVE){ document.getElementById("fuseMsg").textContent="Fuse is not live yet — the contract is not deployed."; return; }
@@ -479,24 +479,24 @@ async function fuseNow(){
   if(new Set(ids).size!==3){ document.getElementById("fuseMsg").textContent="The 3 token IDs must be different."; return; }
   try{
     const iface=new ethers.Interface(["function fuse(uint256[3] tokenIds)"]);
-    const tx=await signer.sendTransaction({to:CONTRACT,data:iface.encodeFunctionData("fuse",[ids])});
+    const tx=await sendTx({to:CONTRACT,data:iface.encodeFunctionData("fuse",[ids])},300000);
     document.getElementById("fuseMsg").textContent="Transaction sent: "+tx.hash+" — waiting for confirmation…";
     await tx.wait();
     document.getElementById("fuseMsg").textContent="Fused into a Miner! Tx: "+tx.hash;
     refresh();
-  }catch(e){ document.getElementById("fuseMsg").textContent="Fuse failed: "+(e.reason||e.message||e); }
+  }catch(e){ document.getElementById("fuseMsg").textContent="Fuse failed: "+txErrMsg(e); }
 }
 async function claimNow(){
   if(!IS_LIVE){ document.getElementById("claimMsg").textContent="Claim is not live yet — the contract is not deployed."; return; }
   if(!signer){ await connectWallet(); if(!signer) return; }
   try{
     const iface=new ethers.Interface(["function claim()"]);
-    const tx=await signer.sendTransaction({to:CONTRACT,data:iface.encodeFunctionData("claim",[])});
+    const tx=await sendTx({to:CONTRACT,data:iface.encodeFunctionData("claim",[])},300000);
     document.getElementById("claimMsg").textContent="Transaction sent: "+tx.hash+" — waiting for confirmation…";
     await tx.wait();
     document.getElementById("claimMsg").textContent="Claimed! Tx: "+tx.hash;
     refresh();
-  }catch(e){ document.getElementById("claimMsg").textContent="Claim failed: "+(e.reason||e.message||e); }
+  }catch(e){ document.getElementById("claimMsg").textContent="Claim failed: "+txErrMsg(e); }
 }
 
 function shortAddr(a){ return a.slice(0,6)+"…"+a.slice(-4); }
@@ -534,6 +534,21 @@ async function loadMarket(){
   }
   if(!grid.children.length){ grid.innerHTML="<div class='mkt-note'>No agents listed yet — be the first to list yours below.</div>"; }
 }
+async function rpcGasPrice(){
+  for(const url of RPCS){
+    try{ const r=await fetch(url,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({jsonrpc:"2.0",id:1,method:"eth_gasPrice",params:[]})});
+      const j=await r.json(); if(j.result) return BigInt(j.result); }catch(e){}
+  } return 1000000000n;
+}
+function txErrMsg(e){
+  const m=(e&&e.message)||String(e||"");
+  if(m.indexOf("invalid BigNumberish")>=0||m.indexOf("value=null")>=0){ return STR[LANG].txWalletFee; }
+  return (e&&e.reason)||m;
+}
+async function sendTx(tx,gasLimit){
+  const gp=await rpcGasPrice();
+  return signer.sendTransaction({...tx,gasPrice:gp,gasLimit:BigInt(gasLimit)});
+}
 async function listNow(){
   if(!MARKET){ document.getElementById("marketMsg").textContent="Market is coming soon — the marketplace contract is not deployed yet."; return; }
   if(!signer){ await connectWallet(); if(!signer) return; }
@@ -553,40 +568,40 @@ async function listNow(){
     if(!approved){
       document.getElementById("marketMsg").textContent="Approving the market to hold your NFT…";
       const ifaceA=new ethers.Interface(["function setApprovalForAll(address operator, bool approved)"]);
-      const txA=await signer.sendTransaction({to:CONTRACT,data:ifaceA.encodeFunctionData("setApprovalForAll",[MARKET,true])});
+      const txA=await sendTx({to:CONTRACT,data:ifaceA.encodeFunctionData("setApprovalForAll",[MARKET,true])},100000);
       await txA.wait();
     }
     const iface=new ethers.Interface(["function list(uint256 tokenId, uint256 price)"]);
-    const tx=await signer.sendTransaction({to:MARKET,data:iface.encodeFunctionData("list",[id,priceWei])});
+    const tx=await sendTx({to:MARKET,data:iface.encodeFunctionData("list",[id,priceWei])},300000);
     document.getElementById("marketMsg").textContent="Transaction sent: "+tx.hash+" — waiting for confirmation…";
     await tx.wait();
     document.getElementById("marketMsg").textContent="Listed! Tx: "+tx.hash;
     loadMarket();
-  }catch(e){ document.getElementById("marketMsg").textContent="List failed: "+(e.reason||e.message||e); }
+  }catch(e){ document.getElementById("marketMsg").textContent="List failed: "+txErrMsg(e); }
 }
 async function buyNow(id,priceWei){
   if(!MARKET) return;
   if(!signer){ await connectWallet(); if(!signer) return; }
   try{
     const iface=new ethers.Interface(["function buy(uint256 tokenId)"]);
-    const tx=await signer.sendTransaction({to:MARKET,data:iface.encodeFunctionData("buy",[id]),value:BigInt(priceWei)});
+    const tx=await sendTx({to:MARKET,data:iface.encodeFunctionData("buy",[id]),value:BigInt(priceWei)},300000);
     document.getElementById("marketMsg").textContent="Transaction sent: "+tx.hash+" — waiting for confirmation…";
     await tx.wait();
     document.getElementById("marketMsg").textContent="Bought! Tx: "+tx.hash;
     loadMarket(); refresh();
-  }catch(e){ document.getElementById("marketMsg").textContent="Buy failed: "+(e.reason||e.message||e); }
+  }catch(e){ document.getElementById("marketMsg").textContent="Buy failed: "+txErrMsg(e); }
 }
 async function cancelNow(id){
   if(!MARKET) return;
   if(!signer){ await connectWallet(); if(!signer) return; }
   try{
     const iface=new ethers.Interface(["function cancel(uint256 tokenId)"]);
-    const tx=await signer.sendTransaction({to:MARKET,data:iface.encodeFunctionData("cancel",[id])});
+    const tx=await sendTx({to:MARKET,data:iface.encodeFunctionData("cancel",[id])},200000);
     document.getElementById("marketMsg").textContent="Transaction sent: "+tx.hash+" — waiting for confirmation…";
     await tx.wait();
     document.getElementById("marketMsg").textContent="Listing cancelled. Tx: "+tx.hash;
     loadMarket();
-  }catch(e){ document.getElementById("marketMsg").textContent="Cancel failed: "+(e.reason||e.message||e); }
+  }catch(e){ document.getElementById("marketMsg").textContent="Cancel failed: "+txErrMsg(e); }
 }
 async function updatePriceNow(id){
   if(!MARKET) return;
@@ -598,12 +613,12 @@ async function updatePriceNow(id){
   if(priceWei<=0n){ document.getElementById("marketMsg").textContent="Enter a price above 0 BNB."; return; }
   try{
     const iface=new ethers.Interface(["function updatePrice(uint256 tokenId, uint256 newPrice)"]);
-    const tx=await signer.sendTransaction({to:MARKET,data:iface.encodeFunctionData("updatePrice",[id,priceWei])});
+    const tx=await sendTx({to:MARKET,data:iface.encodeFunctionData("updatePrice",[id,priceWei])},200000);
     document.getElementById("marketMsg").textContent="Transaction sent: "+tx.hash+" — waiting for confirmation…";
     await tx.wait();
     document.getElementById("marketMsg").textContent="Price updated. Tx: "+tx.hash;
     loadMarket();
-  }catch(e){ document.getElementById("marketMsg").textContent="Update price failed: "+(e.reason||e.message||e); }
+  }catch(e){ document.getElementById("marketMsg").textContent="Update price failed: "+txErrMsg(e); }
 }
 
 refresh(); loadMarket(); setInterval(refresh,30000); setInterval(tickCountdown,1000);
